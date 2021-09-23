@@ -1,21 +1,21 @@
 import sys
 from PyQt5.QtCore import Qt as Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, \
-    QPushButton, QVBoxLayout, QFileDialog, QDialog, QGroupBox, \
-    QVBoxLayout, QStyleFactory, QHBoxLayout, QGridLayout, QTreeView, QFileSystemModel, \
+    QPushButton, QFileDialog, QGroupBox, \
+    QVBoxLayout, QStyleFactory, QHBoxLayout, QTreeView, QFileSystemModel, \
     QMenu
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
-        self._init__Style()
+        self.leftField = None
+        self.contextMenu = None
+        self.setStyle()
         self.setWindowTitle("file manager")
-        self.createLeftFunctionField()
+        self.createLeftField()
 
-        mainlayout = QHBoxLayout()
-
-        leftLayout = QVBoxLayout()
-        leftLayout.addWidget(self.leftFunctionField)
+        leftlayout = QVBoxLayout()
+        leftlayout.addWidget(self.leftField)
 
         model = QFileSystemModel()
         model.setRootPath("")
@@ -27,34 +27,43 @@ class MainWindow(QMainWindow):
         self.tree.setContextMenuPolicy(Qt.CustomContextMenu)
         self.tree.customContextMenuRequested.connect(self.treeContextMenu)
 
-        mainlayout.addLayout(leftLayout)
+        mainlayout = QHBoxLayout()
+        mainlayout.addLayout(leftlayout)
         mainlayout.addWidget(self.tree)
+
         w = QWidget()
         w.setLayout(mainlayout)
         self.setCentralWidget(w)
 
     @staticmethod
-    def _init__Style() -> None:
+    def setStyle() -> None:
         QApplication.setStyle(QStyleFactory.create("Fusion"))
 
-    def treeContextMenu(self, pos):
+    def treeContextMenu(self, pos) -> None:
         self.contextMenu = QMenu()
-        self.actionA = self.contextMenu.addAction(u'Method A')
-        self.actionB = self.contextMenu.addAction(u'Method B')
-        self.actionA.triggered.connect(self.actionHandler)
+        self.contextMenu.addAction(u'add').triggered.connect(self.addHandler)
+        self.contextMenu.addAction(u'rename').triggered.connect(self.renameHandler)
+        self.contextMenu.addAction(u'backup').triggered.connect(self.backupHandler)
         self.contextMenu.exec_(self.mapToGlobal(pos))
         self.contextMenu.show()
 
-    def actionHandler(self):
+    def addHandler(self) -> None:
         for idx in self.tree.selectedIndexes():
             print(idx.data())
 
-    def createLeftFunctionField(self):
-        self.leftFunctionField = QGroupBox("File")
+    def renameHandler(self) -> None:
+        pass
+
+    def backupHandler(self) -> None:
+        pass
+
+    def createLeftField(self) -> None:
+        self.leftField = QGroupBox("File")
 
         OpenFileButton = QPushButton("Open File")
-        OpenFolderButton = QPushButton("Open Folder")
         OpenFileButton.clicked.connect(self.btn_chooseFile)
+
+        OpenFolderButton = QPushButton("Open Folder")
         OpenFolderButton.clicked.connect(self.btn_chooseFolder)
 
         layout = QVBoxLayout()
@@ -62,7 +71,7 @@ class MainWindow(QMainWindow):
         layout.addWidget(OpenFolderButton)
         layout.addStretch(1)
 
-        self.leftFunctionField.setLayout(layout)
+        self.leftField.setLayout(layout)
 
     def btn_chooseFile(self):
         (filePath, fileType) = QFileDialog.getOpenFileName(self, "file", "/")
