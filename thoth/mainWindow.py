@@ -8,36 +8,38 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, \
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
-        self.leftField = None
+        self.leftLayout = None
+        self.rightTree = None
         self.contextMenu = None
-        self.setStyle()
-        self.setWindowTitle("file manager")
+
+        self.loadInitialSetting()
         self.createLeftField()
+        self.createRightFileTree()
+        self.setMainLayout()
 
-        leftlayout = QVBoxLayout()
-        leftlayout.addWidget(self.leftField)
-
-        model = QFileSystemModel()
-        model.setRootPath("")
-        self.tree = QTreeView()
-        self.tree.setModel(model)
-        self.tree.setRootIndex(model.index(""))
-        self.tree.setColumnWidth(0, 250)
-        self.tree.setAlternatingRowColors(True)
-        self.tree.setContextMenuPolicy(Qt.CustomContextMenu)
-        self.tree.customContextMenuRequested.connect(self.treeContextMenu)
-
-        mainlayout = QHBoxLayout()
-        mainlayout.addLayout(leftlayout)
-        mainlayout.addWidget(self.tree)
+    def setMainLayout(self) -> None:
+        mainLayout = QHBoxLayout()
+        mainLayout.addLayout(self.leftLayout)
+        mainLayout.addWidget(self.rightTree)
 
         w = QWidget()
-        w.setLayout(mainlayout)
+        w.setLayout(mainLayout)
         self.setCentralWidget(w)
 
-    @staticmethod
-    def setStyle() -> None:
+    def createRightFileTree(self) -> None:
+        model = QFileSystemModel()
+        model.setRootPath("")
+        self.rightTree = QTreeView()
+        self.rightTree.setModel(model)
+        self.rightTree.setRootIndex(model.index(""))
+        self.rightTree.setColumnWidth(0, 250)
+        self.rightTree.setAlternatingRowColors(True)
+        self.rightTree.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.rightTree.customContextMenuRequested.connect(self.treeContextMenu)
+
+    def loadInitialSetting(self) -> None:
         QApplication.setStyle(QStyleFactory.create("Fusion"))
+        self.setWindowTitle("file manager")
 
     def treeContextMenu(self, pos) -> None:
         self.contextMenu = QMenu()
@@ -58,20 +60,27 @@ class MainWindow(QMainWindow):
         pass
 
     def createLeftField(self) -> None:
-        self.leftField = QGroupBox("File")
+        leftField = QGroupBox("toolbar")
 
-        OpenFileButton = QPushButton("Open File")
+        OpenFileButton = QPushButton("Set backup path")
         OpenFileButton.clicked.connect(self.btn_chooseFile)
 
         OpenFolderButton = QPushButton("Open Folder")
         OpenFolderButton.clicked.connect(self.btn_chooseFolder)
 
+        ExitButton = QPushButton("Exit")
+        ExitButton.clicked.connect(self.btn_exit)
+
         layout = QVBoxLayout()
         layout.addWidget(OpenFileButton)
         layout.addWidget(OpenFolderButton)
+        layout.addWidget(ExitButton)
         layout.addStretch(1)
 
-        self.leftField.setLayout(layout)
+        leftField.setLayout(layout)
+
+        self.leftLayout = QVBoxLayout()
+        self.leftLayout.addWidget(leftField)
 
     def btn_chooseFile(self):
         (filePath, fileType) = QFileDialog.getOpenFileName(self, "file", "/")
@@ -89,3 +98,6 @@ class MainWindow(QMainWindow):
             print("no folder")
             return
         print(folderPath)
+
+    def btn_exit(self) -> None:
+        pass
