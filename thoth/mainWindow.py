@@ -1,4 +1,6 @@
 import sys
+
+from PyQt5 import QtCore
 from PyQt5.QtCore import Qt as Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, \
     QPushButton, QFileDialog, QGroupBox, \
@@ -8,6 +10,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, \
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
+        self.model = None
         self.leftLayout = None
         self.rightTree = None
         self.contextMenu = None
@@ -27,11 +30,11 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(w)
 
     def createRightFileTree(self) -> None:
-        model = QFileSystemModel()
-        model.setRootPath("")
+        self.model = QFileSystemModel()
+        self.model.setRootPath("")
         self.rightTree = QTreeView()
-        self.rightTree.setModel(model)
-        self.rightTree.setRootIndex(model.index(""))
+        self.rightTree.setModel(self.model)
+        self.rightTree.setRootIndex(self.model.index(""))
         self.rightTree.setColumnWidth(0, 250)
         self.rightTree.setAlternatingRowColors(True)
         self.rightTree.setContextMenuPolicy(Qt.CustomContextMenu)
@@ -49,15 +52,20 @@ class MainWindow(QMainWindow):
         self.contextMenu.exec_(self.mapToGlobal(pos))
         self.contextMenu.show()
 
-    def addHandler(self) -> None:
-        for idx in self.tree.selectedIndexes():
-            print(idx.data())
+    def getFilePath(self) -> str:
+        return self.model.filePath(self.rightTree.currentIndex())
+
+    def addHandler(self, index) -> None:
+        path = self.getFilePath()
+        print(path)
 
     def renameHandler(self) -> None:
-        pass
+        path = self.getFilePath()
+        print(path)
 
     def backupHandler(self) -> None:
-        pass
+        path = self.getFilePath()
+        print(path)
 
     def createLeftField(self) -> None:
         leftField = QGroupBox("toolbar")
