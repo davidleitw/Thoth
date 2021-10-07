@@ -55,8 +55,9 @@ class MainWindow(QMainWindow):
     def getFilePath(self) -> str:
         return self.model.filePath(self.rightTree.currentIndex())
 
-    def addHandler(self, index) -> None:
+    def addHandler(self) -> None:
         path = self.getFilePath()
+        self.rightTree.setRootIndex(self.model.index(path))
         print(path)
 
     def renameHandler(self) -> None:
