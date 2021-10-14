@@ -1,12 +1,10 @@
-import sys
-
-from PyQt5 import QtCore
 from PyQt5.QtCore import Qt as Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, \
     QPushButton, QFileDialog, QGroupBox, \
     QVBoxLayout, QStyleFactory, QHBoxLayout, QTreeView, QFileSystemModel, \
     QMenu
 
+from thoth.Controller import Controller
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
@@ -14,6 +12,7 @@ class MainWindow(QMainWindow):
         self.model = None
         self.leftLayout = None
         self.rightTree = None
+        self.controller = Controller()
         self.contextMenu = None
 
         self.loadInitialSetting()
@@ -28,17 +27,18 @@ class MainWindow(QMainWindow):
     def createLeftField(self) -> None:
         leftField = QGroupBox("toolbar")
 
-        OpenFileButton = QPushButton("Set backup path")
-        OpenFileButton.clicked.connect(self.btn_chooseFile)
-
+        SetupButton = QPushButton("Set backup path")
+        SetupButton.setIcon(self.style().standardIcon)
+        SetupButton.clicked.connect(self.controller.open_folder)
+        
         OpenFolderButton = QPushButton("Open Folder")
-        OpenFolderButton.clicked.connect(self.btn_chooseFolder)
-
+        OpenFolderButton.clicked.connect(self.controller.set_backup)
+        
         ExitButton = QPushButton("Exit")
-        ExitButton.clicked.connect(self.btn_exit)
+        ExitButton.clicked.connect(self.mainWindowClose)
 
         layout = QVBoxLayout()
-        layout.addWidget(OpenFileButton)
+        layout.addWidget(SetupButton)
         layout.addWidget(OpenFolderButton)
         layout.addWidget(ExitButton)
         layout.addStretch(1)
@@ -96,22 +96,5 @@ class MainWindow(QMainWindow):
         path = self.getFilePath()
         print(path)
 
-    def btn_chooseFile(self):
-        (filePath, fileType) = QFileDialog.getOpenFileName(self, "file", "/")
-
-        if filePath == "":
-            print("no file choose.")
-            return
-
-        print(filePath, fileType)
-
-    def btn_chooseFolder(self):
-        folderPath = QFileDialog.getExistingDirectory(self, "folder", "/")
-
-        if folderPath == "":
-            print("no folder")
-            return
-        print(folderPath)
-
-    def btn_exit(self) -> None:
-        pass
+    def mainWindowClose(self) -> None:
+        self.close()
