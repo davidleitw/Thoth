@@ -1,5 +1,5 @@
 from PyQt5.QtCore import Qt as Qt
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, \
+from PyQt5.QtWidgets import QApplication, QMainWindow, QStyle, QWidget, \
     QPushButton, QFileDialog, QGroupBox, \
     QVBoxLayout, QStyleFactory, QHBoxLayout, QTreeView, QFileSystemModel, \
     QMenu
@@ -27,14 +27,19 @@ class MainWindow(QMainWindow):
     def createLeftField(self) -> None:
         leftField = QGroupBox("toolbar")
 
-        SetupButton = QPushButton("Set backup path")
-        SetupButton.setIcon(self.style().standardIcon)
+        SetupButton = QPushButton(" Set backup path")
+        SetupButton.setIcon(self.style().standardIcon(getattr(QStyle, 'SP_DirOpenIcon')))
+        SetupButton.setStyleSheet("QPushButton { text-align: left; }")
         SetupButton.clicked.connect(self.controller.open_folder)
         
-        OpenFolderButton = QPushButton("Open Folder")
+        OpenFolderButton = QPushButton(" Open Folder")
+        OpenFolderButton.setIcon(self.style().standardIcon(getattr(QStyle, 'SP_DirOpenIcon')))
+        OpenFolderButton.setStyleSheet("QPushButton { text-align: left; }")
         OpenFolderButton.clicked.connect(self.controller.set_backup)
         
-        ExitButton = QPushButton("Exit")
+        ExitButton = QPushButton(" Exit")
+        ExitButton.setIcon(self.style().standardIcon(getattr(QStyle, 'SP_DialogCloseButton')))
+        ExitButton.setStyleSheet("QPushButton { text-align: left; }")
         ExitButton.clicked.connect(self.mainWindowClose)
 
         layout = QVBoxLayout()
