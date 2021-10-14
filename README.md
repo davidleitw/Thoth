@@ -40,4 +40,3 @@
 - [Layout management](https://www.pythonguis.com/tutorials/pyqt-layouts/)
 - [PyQt5 QFileDialog](https://blog.csdn.net/humanking7/article/details/80546728)
 - [how to have a directory dialog](https://stackoverflow.com/questions/4286036/how-to-have-a-directory-dialog)
-- 
