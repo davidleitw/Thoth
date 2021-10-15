@@ -5,30 +5,31 @@ class FileManager:
 
     def __init__(self):
         self.Copy_Path = ""
+        self.rightTree_Path = ""
 
-    def set_Copy_Path(self, path) -> None:
+    def set_copy_path(self, path) -> None:
         self.Copy_Path = path
 
-    def get_Copy_Path(self) -> str:
+    def get_copy_path(self) -> str:
         return self.Copy_Path
 
-    def getExistingDirectory(self, folder):
-        QFileDialog.getExistingDirectory(None, folder, "/")
+    def createfile(self, path) -> None:
+        os.system("touch " + path)
 
-    def getFilePath(self, model) -> str:
-        return model.filePath(self.rightTree.currentIndex())
+    def createfolder(self, path) -> None:
+        os.system("mkdir" + path)
 
-    def createfile(self, filename) -> None:
-        os.system("touch " + filename)
+    def rename(self, new_name, filepath):
+        n = len(filepath) - 1
+        while n > 0:
+            if filepath[n] == '/':
+                break
+            else:
+                n-=1
+        os.system("mv " + filepath + " " + filepath[:n + 1] + new_name)
 
-    def createfolder(self, foldername) -> None:
-        os.system("mkdir" + foldername)
+    def delete(self, path) -> None:
+        os.system("rm -r " + path)
 
-    def renae(self, new_name, filename):
-        os.system("mv ./" + filename + " ./" + new_name)
-
-    def cd_Path(self, path) -> None:
-        os.system("cd " + path)
-
-    def delete(self, filename) -> None:
-        os.system("rm ./" + filename)
+    def backup(self, tar, src) -> None:
+        os.system("cp " + src  + " " + tar)

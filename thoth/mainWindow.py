@@ -30,12 +30,12 @@ class MainWindow(QMainWindow):
         SetupButton = QPushButton(" Set backup path")
         SetupButton.setIcon(self.style().standardIcon(getattr(QStyle, 'SP_DirOpenIcon')))
         SetupButton.setStyleSheet("QPushButton { text-align: left; }")
-        SetupButton.clicked.connect(self.controller.open_folder)
+        SetupButton.clicked.connect(self.controller.set_backup)
         
         OpenFolderButton = QPushButton(" Open Folder")
         OpenFolderButton.setIcon(self.style().standardIcon(getattr(QStyle, 'SP_DirOpenIcon')))
         OpenFolderButton.setStyleSheet("QPushButton { text-align: left; }")
-        OpenFolderButton.clicked.connect(self.controller.set_backup)
+        OpenFolderButton.clicked.connect(self.controller.open_folder)
         
         ExitButton = QPushButton(" Exit")
         ExitButton.setIcon(self.style().standardIcon(getattr(QStyle, 'SP_DialogCloseButton')))
@@ -57,7 +57,7 @@ class MainWindow(QMainWindow):
         self.model = QFileSystemModel()
         self.model.setRootPath("")
         self.rightTree = QTreeView()
-        self.rightTree.setModel(self.model)
+        self.rightTree.setModel(self.model)#model is tree
         self.rightTree.setRootIndex(self.model.index(""))
         self.rightTree.setColumnWidth(0, 250)
         self.rightTree.setAlternatingRowColors(True)
@@ -85,21 +85,27 @@ class MainWindow(QMainWindow):
     def getFilePath(self) -> str:
         return self.model.filePath(self.rightTree.currentIndex())
 
-    def addHandler(self) -> None:
+    def addHandler(self) -> None:#TODO
         path = self.getFilePath()
         self.rightTree.setRootIndex(self.model.index(path))
         print(path)
 
     def renameHandler(self) -> None:
         path = self.getFilePath()
-        print(path)
+        #new_name = windows.gettext()...#TODO
+        #new_name = "test"
+        self.controller.rename(path, new_name)
+        #print("rename: "+path)
 
     def deleteHandler(self) -> None:
-        pass
+        path = self.getFilePath()
+        print("deleteHandler: " + path)
+        self.controller.delete(path)
 
     def backupHandler(self) -> None:
         path = self.getFilePath()
-        print(path)
+        self.controller.backup(path)
+        print("backupHandler: " + path)
 
     def mainWindowClose(self) -> None:
         self.close()

@@ -1,32 +1,36 @@
 from PyQt5.QtWidgets import QFileDialog
+from thoth.FileManager import FileManager as FM
 
-class Controller():
+
+class Controller:
     def __init__(self):
-        pass
-        
+        self.path_record = FM()
+
     def set_backup(self) -> None:
         folderPath = QFileDialog.getExistingDirectory(None, "folder", "/")
         if folderPath == "":
             return
-        print(folderPath)
+        self.path_record.set_copy_path(folderPath)
+        #print("copy_path: " + self.path_record.Copy_Path)
 
-    def open_folder(self) -> None:
+    def open_folder(self) -> None:#TODO
         folderPath = QFileDialog.getExistingDirectory(None, "folder", "/")
         if folderPath == "":
             return
-        print(folderPath)
+        #print("open_folder: " + folderPath)
 
-    def create_new_file(self) -> None:
+    def create_new_file(self, path) -> None:
+       FM.createfile(path)
+
+    def create_new_folder(self, path) -> None:
+        FM.createfolder(path)
         pass
 
-    def create_new_folder(self) -> None:
-        pass
+    def rename(self, path, new_name) -> None:
+        FM.rename(None, new_name, path)
 
-    def rename(self) -> None:
-        pass
+    def delete(self, path) -> None:
+        FM.delete(None, path)
 
-    def delete(self) -> None:
-        pass
-
-    def backup(self) -> None:
-        pass
+    def backup(self, cur_path) -> None:
+        FM.backup(None, self.path_record.Copy_Path, cur_path)
