@@ -1,10 +1,9 @@
-from PyQt5.QtWidgets import QFileDialog
 import os
 import shutil
 from pathlib import Path
+from PyQt5.QtWidgets import QFileDialog
 
 class FileManager:
-
     def __init__(self):
         self.Copy_Path = ""
 
@@ -19,23 +18,28 @@ class FileManager:
 
     def createfolder(self, path) -> None:
         os.mkdir(path)
-
-    @staticmethod
-    def rename(new_name, filepath) -> bool:
+        
+    def rename(self, new_name, filepath) -> bool:
         prefix = os.path.split(filepath)[0]
         new_filepath = os.path.join(prefix, new_name)
         if not os.path.isfile(new_filepath):
-            os.rename(filepath, new_filepath)
-            return True
+            try:
+                os.rename(filepath, new_filepath)
+                return True
+            except:
+                print("PermissionError")
         return False
         
-
-    @staticmethod
-    def delete(path) -> None:
-        if os.path.isfile(path):
-            os.remove(path)
-        else:
-            shutil.rmtree(path)
+    def delete(self, path) -> bool:
+        try:
+            if os.path.isfile(path):
+                os.remove(path)
+            else:
+                shutil.rmtree(path)
+            return True
+        except PermissionError:
+            print("PermissionError")
+            return False
 
     def backup(self, dst, src) -> None:
         print(src + " " + dst)
