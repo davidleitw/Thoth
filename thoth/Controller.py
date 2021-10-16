@@ -26,8 +26,8 @@ class Controller:
         FM.createfolder(path)
         pass
 
-    def rename(self, path, new_name) -> None:
-        FM.rename(new_name, path)
+    def rename(self, new_name, filepath) -> bool:
+        return FM.rename(new_name, filepath)
 
     def delete(self, path) -> None:
         FM.delete(path)

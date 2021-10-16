@@ -23,28 +23,14 @@ class FileManager:
 
     @staticmethod
     def rename(new_name, filepath) -> bool:
-        n = len(filepath) - 1
-        while n > 0:
-            if filepath[n] == '/':
-                break
-            else:
-                n-=1
-
-        current_list = [i for i in os.listdir(filepath[:n + 1])]
-        flag = True
-        for i in current_list:
-            print(i)
-            if i == new_name:
-                flag = False
-                break;
-
-        print(flag)
-
-        if flag:
-            os.rename(filepath, filepath[:n + 1] + new_name)
-            return flag
-
-        return flag
+        prefix = os.path.split(filepath)[0]
+        new_filepath = os.path.join(prefix, new_name)
+        print(filepath, new_filepath)
+        if not os.path.isfile(new_filepath):
+            os.rename(filepath, new_filepath)
+            return True
+        return False
+        
 
     @staticmethod
     def delete(path) -> None:

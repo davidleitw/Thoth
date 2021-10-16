@@ -94,14 +94,14 @@ class MainWindow(QMainWindow):
         print(path)
 
     def renameHandler(self) -> None:
-        path = self.getFilePath()
+        filepath = self.getFilePath()
 
-        file = ntpath.basename(path)
-        newFileName, ok = QInputDialog.getText(self, "rename", "filename: ", QLineEdit.Normal, file)
+        old_name = ntpath.basename(filepath)
+        newFileName, ok = QInputDialog.getText(self, "rename", "filename: ", QLineEdit.Normal, old_name)
         if ok and newFileName != '':
             print(newFileName)
         
-        self.controller.rename(path, newFileName)
+        print(self.controller.rename(newFileName, filepath))
 
     def deleteHandler(self) -> None:
         path = self.getFilePath()
