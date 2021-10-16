@@ -1,3 +1,4 @@
+from PyQt5 import QtCore
 from PyQt5.QtCore import Qt as Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QStyle, QWidget, \
     QPushButton, QGroupBox, \
@@ -44,7 +45,7 @@ class MainWindow(QMainWindow):
         ExitButton = QPushButton(" Exit")
         ExitButton.setIcon(self.style().standardIcon(getattr(QStyle, 'SP_DialogCloseButton')))
         ExitButton.setStyleSheet("QPushButton { text-align: left; }")
-        ExitButton.clicked.connect(self.mainWindowClose)
+        ExitButton.clicked.connect(self.exitHandler)
 
         layout = QVBoxLayout()
         layout.addWidget(SetupButton)
@@ -82,7 +83,7 @@ class MainWindow(QMainWindow):
     def getFilePath(self) -> str:
         return self.model.filePath(self.rightTree.currentIndex())
 
-    def createTreeContextMenu(self, pos) -> None:
+    def createTreeContextMenu(self, pos: QtCore.QPoint) -> None:
         self.contextMenu = QMenu()
         if os.path.isdir(self.getFilePath()):
             self.contextMenu.addAction(u'New file').triggered.connect(self.createNewFileHandler)
@@ -95,7 +96,7 @@ class MainWindow(QMainWindow):
         self.contextMenu.show()
 
     def openFolderHandler(self) -> None:
-        self.prePath = self.model.filePath(self.rightTree.rootIndex())
+        self.prePath = self.model.filePath(self.rightTree.rootIndex()) # 將前一次操作的目錄存起來，供上一頁功能使用
         filepath = self.controller.open_folder()
         if filepath != '' and os.path.isdir(filepath):
             self.rightTree.setRootIndex(self.model.index(filepath))
@@ -126,14 +127,15 @@ class MainWindow(QMainWindow):
         print("deleteHandler: " + filepath)
         self.controller.delete(filepath)
 
+    # 上一頁功能
     def backHandler(self) -> None:
         self.rightTree.setRootIndex(self.model.index(self.prePath))
 
+    # 備份功能
     def backupHandler(self) -> None:
         filepath = self.getFilePath()
         self.controller.backup(filepath)
-        print("backupHandler: " + filepath)
-
-    def mainWindowClose(self) -> None:
+        
+    def exitHandler(self) -> None:
         self.close()
         

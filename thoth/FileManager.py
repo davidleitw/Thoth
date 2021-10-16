@@ -5,21 +5,21 @@ from PyQt5.QtWidgets import QFileDialog
 
 class FileManager:
     def __init__(self):
-        self.Copy_Path = ""
+        self.backup_path = ""
 
-    def set_copy_path(self, path) -> None:
-        self.Copy_Path = path
+    def set_backup_path(self, path) -> None:
+        self.backup_path = path
 
-    def get_copy_path(self) -> str:
-        return self.Copy_Path
+    def get_backup_path(self) -> str:
+        return self.backup_path
 
-    def createfile(self, path) -> None:
+    def createfile(self, path: str) -> None:
         Path(path).touch()
 
-    def createfolder(self, path) -> None:
+    def createfolder(self, path: str) -> None:
         os.mkdir(path)
         
-    def rename(self, new_name, filepath) -> bool:
+    def rename(self, new_name: str, filepath: str) -> bool:
         prefix = os.path.split(filepath)[0]
         new_filepath = os.path.join(prefix, new_name)
         if not os.path.isfile(new_filepath):
@@ -30,7 +30,7 @@ class FileManager:
                 print("PermissionError")
         return False
         
-    def delete(self, path) -> bool:
+    def delete(self, path: str) -> bool:
         try:
             if os.path.isfile(path):
                 os.remove(path)
@@ -41,15 +41,18 @@ class FileManager:
             print("PermissionError")
             return False
 
-    def backup(self, dst, src) -> None:
-        print(src + " " + dst)
-        if os.path.isfile(src):
-            shutil.copy(src, dst)
+    def backup(self, path: str) -> bool:
+        if os.path.isfile(path):
+            try:
+                shutil.copy(path, self.backup_path)
+            except PermissionError:
+                return False
         else:
-            dir_name = os.path.basename(dst)
-            new_path = os.path.join(src, dir_name) # a/b
-            if os.path.exists(new_path):
-                print('path exist.')
-                # shutil.rmtree(new_path)
-            else:    
-                shutil.copytree(dst, new_path)
+            new_path = os.path.join(self.backup_path, os.path.basename(path))
+            try:
+                if os.path.exists(new_path):
+                    return False
+                shutil.copytree(path, new_path)
+            except PermissionError:
+                return False
+        return True
