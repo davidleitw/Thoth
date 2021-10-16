@@ -24,7 +24,6 @@ class Controller:
 
     def create_new_folder(self, path) -> None:
         FM.createfolder(path)
-        pass
 
     def rename(self, new_name, filepath) -> bool:
         return FM.rename(new_name, filepath)
@@ -33,4 +32,4 @@ class Controller:
         FM.delete(path)
 
     def backup(self, cur_path) -> None:
-        FM.backup(None, self.path_record.Copy_Path, cur_path)
+        FM.backup(None, cur_path, self.path_record.Copy_Path)

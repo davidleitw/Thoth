@@ -42,5 +42,11 @@ class FileManager:
         if os.path.isfile(src):
             shutil.copy(src, dst)
         else:
-            shutil.copytree(src, dst)
-        print(src + " " + dst)
+            dir_name = os.path.basename(dst)
+            new_path = os.path.join(src, dir_name) # a/b
+            if os.path.exists(new_path):
+                print('path exist.')
+                # shutil.rmtree(new_path)
+            else:    
+                shutil.copytree(dst, new_path)
+        
