@@ -89,11 +89,13 @@ class MainWindow(QMainWindow):
 
     def addHandler(self) -> None:#TODO
         path = self.getFilePath()
+        #create_new_file(self, path)
         self.rightTree.setRootIndex(self.model.index(path))
         print(path)
 
     def renameHandler(self) -> None:
         path = self.getFilePath()
+
         file = ntpath.basename(path)
         newFileName, ok = QInputDialog.getText(self, "rename", "filename: ", QLineEdit.Normal, file)
         if ok and newFileName != '':

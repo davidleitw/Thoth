@@ -1,5 +1,7 @@
 from PyQt5.QtWidgets import QFileDialog
 import os
+import shutil
+from pathlib import Path
 
 class FileManager:
 
@@ -14,22 +16,46 @@ class FileManager:
         return self.Copy_Path
 
     def createfile(self, path) -> None:
-        os.system("touch " + path)
+        Path(path).touch()
 
     def createfolder(self, path) -> None:
-        os.system("mkdir" + path)
+        os.mkdir(path)
 
-    def rename(self, new_name, filepath):
+    @staticmethod
+    def rename(new_name, filepath) -> bool:
         n = len(filepath) - 1
         while n > 0:
             if filepath[n] == '/':
                 break
             else:
                 n-=1
-        os.system("mv " + filepath + " " + filepath[:n + 1] + new_name)
 
-    def delete(self, path) -> None:
-        os.system("rm -r " + path)
+        current_list = [i for i in os.listdir(filepath[:n + 1])]
+        flag = True
+        for i in current_list:
+            print(i)
+            if i == new_name:
+                flag = False
+                break;
 
-    def backup(self, tar, src) -> None:
-        os.system("cp " + src  + " " + tar)
+        print(flag)
+
+        if flag:
+            os.rename(filepath, filepath[:n + 1] + new_name)
+            return flag
+
+        return flag
+
+    @staticmethod
+    def delete(path) -> None:
+        if os.path.isfile(path):
+            os.remove(path)
+        else:
+            shutil.rmtree(path)
+
+    def backup(self, dst, src) -> None:
+        if os.path.isfile(src):
+            shutil.copy(src, dst)
+        else:
+            shutil.copytree(src, dst)
+        print(src + " " + dst)

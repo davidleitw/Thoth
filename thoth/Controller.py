@@ -11,7 +11,7 @@ class Controller:
         if folderPath == "":
             return
         self.path_record.set_copy_path(folderPath)
-        #print("copy_path: " + self.path_record.Copy_Path)
+        print("copy_path: " + self.path_record.Copy_Path)
 
     def open_folder(self) -> None:#TODO
         folderPath = QFileDialog.getExistingDirectory(None, "folder", "/")
@@ -27,10 +27,10 @@ class Controller:
         pass
 
     def rename(self, path, new_name) -> None:
-        FM.rename(None, new_name, path)
+        FM.rename(new_name, path)
 
     def delete(self, path) -> None:
-        FM.delete(None, path)
+        FM.delete(path)
 
     def backup(self, cur_path) -> None:
         FM.backup(None, self.path_record.Copy_Path, cur_path)
