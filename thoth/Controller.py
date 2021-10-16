@@ -20,7 +20,7 @@ class Controller:
         #print("open_folder: " + folderPath)
 
     def create_new_file(self, path) -> None:
-       FM.createfile(path)
+        FM.createfile(path)
 
     def create_new_folder(self, path) -> None:
         FM.createfolder(path)

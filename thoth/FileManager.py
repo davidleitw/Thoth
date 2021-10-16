@@ -25,7 +25,6 @@ class FileManager:
     def rename(new_name, filepath) -> bool:
         prefix = os.path.split(filepath)[0]
         new_filepath = os.path.join(prefix, new_name)
-        print(filepath, new_filepath)
         if not os.path.isfile(new_filepath):
             os.rename(filepath, new_filepath)
             return True

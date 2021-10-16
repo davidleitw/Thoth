@@ -99,9 +99,8 @@ class MainWindow(QMainWindow):
         old_name = ntpath.basename(filepath)
         newFileName, ok = QInputDialog.getText(self, "rename", "filename: ", QLineEdit.Normal, old_name)
         if ok and newFileName != '':
-            print(newFileName)
-        
-        print(self.controller.rename(newFileName, filepath))
+            self.controller.rename(newFileName, filepath)
+        print("Can't input space!!!")
 
     def deleteHandler(self) -> None:
         path = self.getFilePath()
