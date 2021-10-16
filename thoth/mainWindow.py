@@ -1,10 +1,12 @@
+from PyQt5 import QtWidgets
 from PyQt5.QtCore import Qt as Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QStyle, QWidget, \
-    QPushButton, QFileDialog, QGroupBox, \
+    QPushButton, QGroupBox, \
     QVBoxLayout, QStyleFactory, QHBoxLayout, QTreeView, QFileSystemModel, \
-    QMenu
-
+    QMenu, QLineEdit, QInputDialog
+import ntpath
 from thoth.Controller import Controller
+
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
@@ -92,10 +94,12 @@ class MainWindow(QMainWindow):
 
     def renameHandler(self) -> None:
         path = self.getFilePath()
-        #new_name = windows.gettext()...#TODO
-        #new_name = "test"
-        self.controller.rename(path, new_name)
-        #print("rename: "+path)
+        file = ntpath.basename(path)
+        newFileName, ok = QInputDialog.getText(self, "rename", "filename: ", QLineEdit.Normal, file)
+        if ok and newFileName != '':
+            print(newFileName)
+        
+        self.controller.rename(path, newFileName)
 
     def deleteHandler(self) -> None:
         path = self.getFilePath()
