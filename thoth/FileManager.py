@@ -7,7 +7,6 @@ class FileManager:
 
     def __init__(self):
         self.Copy_Path = ""
-        self.rightTree_Path = ""
 
     def set_copy_path(self, path) -> None:
         self.Copy_Path = path
@@ -39,6 +38,7 @@ class FileManager:
             shutil.rmtree(path)
 
     def backup(self, dst, src) -> None:
+        print(src + " " + dst)
         if os.path.isfile(src):
             shutil.copy(src, dst)
         else:
@@ -49,4 +49,3 @@ class FileManager:
                 # shutil.rmtree(new_path)
             else:    
                 shutil.copytree(dst, new_path)
-        
