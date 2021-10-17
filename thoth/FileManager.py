@@ -7,7 +7,7 @@ class FileManager:
     def __init__(self):
         self.backup_path = ""
 
-    def set_backup_path(self, path) -> None:
+    def set_backup_path(self, path: str) -> None:
         self.backup_path = path
 
     def get_backup_path(self) -> str:
@@ -38,10 +38,13 @@ class FileManager:
                 shutil.rmtree(path)
             return True
         except PermissionError:
-            print("PermissionError")
             return False
 
     def backup(self, path: str) -> bool:
+        # 沒有設置備份路徑的情況
+        if self.backup_path == "":
+            return False
+
         if os.path.isfile(path):
             try:
                 shutil.copy(path, self.backup_path)

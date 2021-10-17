@@ -14,8 +14,8 @@ class MainWindow(QMainWindow):
         self.prePath = "/"
         self.leftLayout = None
         self.rightTree = None
-        self.controller = Controller()
         self.contextMenu = None
+        self.controller = Controller()
         
         self.loadInitialSetting()
         self.createLeftField()
@@ -71,18 +71,6 @@ class MainWindow(QMainWindow):
         self.rightTree.setContextMenuPolicy(Qt.CustomContextMenu)
         self.rightTree.customContextMenuRequested.connect(self.createTreeContextMenu)
 
-    def setMainLayout(self) -> None:
-        mainLayout = QHBoxLayout()
-        mainLayout.addLayout(self.leftLayout)
-        mainLayout.addWidget(self.rightTree)
-
-        w = QWidget()
-        w.setLayout(mainLayout)
-        self.setCentralWidget(w)
-
-    def getFilePath(self) -> str:
-        return self.model.filePath(self.rightTree.currentIndex())
-
     def createTreeContextMenu(self, pos: QtCore.QPoint) -> None:
         self.contextMenu = QMenu()
         if os.path.isdir(self.getFilePath()):
@@ -95,23 +83,44 @@ class MainWindow(QMainWindow):
         self.contextMenu.exec_(self.mapToGlobal(pos))
         self.contextMenu.show()
 
+    def setMainLayout(self) -> None:
+        mainLayout = QHBoxLayout()
+        mainLayout.addLayout(self.leftLayout)
+        mainLayout.addWidget(self.rightTree)
+
+        w = QWidget()
+        w.setLayout(mainLayout)
+        self.setCentralWidget(w)
+
+    def getFilePath(self) -> str:
+        return self.model.filePath(self.rightTree.currentIndex())
+
     def openFolderHandler(self) -> None:
         self.prePath = self.model.filePath(self.rightTree.rootIndex()) # 將前一次操作的目錄存起來，供上一頁功能使用
         filepath = self.controller.open_folder()
         if filepath != '' and os.path.isdir(filepath):
             self.rightTree.setRootIndex(self.model.index(filepath))
 
+    # 上一頁功能
+    def backHandler(self) -> None:
+        self.rightTree.setRootIndex(self.model.index(self.prePath))
+
+    def exitHandler(self) -> None:
+        self.close()
+
     def createNewFileHandler(self) -> None:
         basePath = self.getFilePath()
         newFileName, ok = QInputDialog.getText(self, "create new file", "file name: ", QLineEdit.Normal, "")
         if ok and newFileName != '':
             self.controller.create(os.path.join(basePath, newFileName), "file")
-        
+        self.contextMenu.clear()
+
     def createNewFolderHandler(self) -> None:
         basePath = self.getFilePath()
         newFolderName, ok = QInputDialog.getText(self, "create new folder", "folder name: ", QLineEdit.Normal, "")
         if ok and newFolderName != '':
             self.controller.create(os.path.join(basePath, newFolderName), "folder")
+        self.contextMenu.clear()
 
     def renameHandler(self) -> None:
         filepath = self.getFilePath()
@@ -120,22 +129,18 @@ class MainWindow(QMainWindow):
         newFileName, ok = QInputDialog.getText(self, "rename", "file / folder name: ", QLineEdit.Normal, old_name)
         if ok and newFileName != '':
             self.controller.rename(newFileName, filepath)
-        
+        self.contextMenu.clear()
 
     def deleteHandler(self) -> None:
         filepath = self.getFilePath()
-        print("deleteHandler: " + filepath)
         self.controller.delete(filepath)
-
-    # 上一頁功能
-    def backHandler(self) -> None:
-        self.rightTree.setRootIndex(self.model.index(self.prePath))
+        self.contextMenu.clear()
 
     # 備份功能
     def backupHandler(self) -> None:
         filepath = self.getFilePath()
         self.controller.backup(filepath)
-        
-    def exitHandler(self) -> None:
-        self.close()
+        self.contextMenu.clear()
+
+    
         
