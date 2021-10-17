@@ -114,6 +114,7 @@ class MainWindow(QMainWindow):
         if ok and newFileName != '':
             self.controller.create(os.path.join(basePath, newFileName), "file")
         self.contextMenu.clear()
+        self.contextMenu.close()
 
     def createNewFolderHandler(self) -> None:
         basePath = self.getFilePath()
@@ -121,6 +122,7 @@ class MainWindow(QMainWindow):
         if ok and newFolderName != '':
             self.controller.create(os.path.join(basePath, newFolderName), "folder")
         self.contextMenu.clear()
+        self.contextMenu.close()
 
     def renameHandler(self) -> None:
         filepath = self.getFilePath()
@@ -130,17 +132,20 @@ class MainWindow(QMainWindow):
         if ok and newFileName != '':
             self.controller.rename(newFileName, filepath)
         self.contextMenu.clear()
+        self.contextMenu.close()
 
     def deleteHandler(self) -> None:
         filepath = self.getFilePath()
         self.controller.delete(filepath)
         self.contextMenu.clear()
+        self.contextMenu.close()
 
     # 備份功能
     def backupHandler(self) -> None:
         filepath = self.getFilePath()
         self.controller.backup(filepath)
         self.contextMenu.clear()
+        self.contextMenu.close()
 
     
         
