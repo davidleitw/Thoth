@@ -14,24 +14,27 @@ class FileManagerTest(unittest.TestCase):
             self.fm = FileManager()
         except ImportError:
             return
-        
-        self.backup_path = '/tmp/backup'
-        self.tmp_path = '/tmp/testfolder'
-        os.mkdir(self.tmp_path)
-        os.mkdir(self.backup_path)
-        
-    # 測試結束，將測試時產生的文件刪除
-    def tearDown(self):
-        shutil.rmtree(self.tmp_path)
-        shutil.rmtree(self.backup_path)
+
+    @classmethod
+    def setUpClass(cls):
+        cls.a = 5
+        FileManagerTest.test_backup_path = '/tmp/testBackup'
+        FileManagerTest.test_tmp_path = '/tmp/testFolder'
+        os.mkdir(FileManagerTest.test_tmp_path)
+        os.mkdir(FileManagerTest.test_backup_path)
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(FileManagerTest.test_tmp_path)
+        shutil.rmtree(FileManagerTest.test_backup_path)
 
     def test_FM_createfile(self):
         print('\n=== test fileManager.createfile function ===\n')
         # 生成 10 個隨機字串
-        file_set = StringGenerator("[\l\d]{10}").render_list(cnt=10, unique=True)
+        file_set = StringGenerator("[\l\d]{16}").render_list(cnt=10, unique=True)
         for file_name in file_set:
             # 獲得路徑
-            file_path = os.path.join(self.tmp_path, file_name)
+            file_path = os.path.join(FileManagerTest.test_tmp_path, file_name)
             
             # 依序利用 FileManager api 建立文件，並且用 assert 檢查是否存在
             self.fm.createfile(file_path)
@@ -40,9 +43,9 @@ class FileManagerTest(unittest.TestCase):
 
     def test_FM_createfolder(self):
         print('\n=== test fileManager.createfolder function ===\n')
-        folder_set = StringGenerator("[\l\d]{10}").render_list(cnt=10, unique=True)
+        folder_set = StringGenerator("[\l\d]{16}").render_list(cnt=10, unique=True)
         for folder_name in folder_set:
-            folder_path = os.path.join(self.tmp_path, folder_name)
+            folder_path = os.path.join(FileManagerTest.test_tmp_path, folder_name)
 
             self.fm.createfolder(folder_path)
             self.assertTrue(os.path.isdir(folder_path))
