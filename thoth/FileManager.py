@@ -1,7 +1,6 @@
 import os
 import shutil
 from pathlib import Path
-from PyQt5.QtWidgets import QFileDialog
 
 class FileManager:
     def __init__(self):
