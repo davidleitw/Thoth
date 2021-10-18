@@ -17,16 +17,15 @@ class FileManagerTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.a = 5
-        FileManagerTest.test_backup_path = '/tmp/testBackup'
-        FileManagerTest.test_tmp_path = '/tmp/testFolder'
-        os.mkdir(FileManagerTest.test_tmp_path)
-        os.mkdir(FileManagerTest.test_backup_path)
+        cls.test_backup_path = '/tmp/testBackup'
+        cls.test_tmp_path = '/tmp/testFolder'
+        os.mkdir(cls.test_tmp_path)
+        os.mkdir(cls.test_backup_path)
 
     @classmethod
     def tearDownClass(cls):
-        shutil.rmtree(FileManagerTest.test_tmp_path)
-        shutil.rmtree(FileManagerTest.test_backup_path)
+        shutil.rmtree(cls.test_tmp_path)
+        shutil.rmtree(cls.test_backup_path)
 
     def test_FM_createfile(self):
         print('\n=== test fileManager.createfile function ===\n')
