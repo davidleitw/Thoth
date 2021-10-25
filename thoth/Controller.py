@@ -32,5 +32,5 @@ class Controller:
             return
         self._manager.set_backup_path(folderPath)
         
-    def open_folder(self) -> str:
-        return QFileDialog.getExistingDirectory(None, "folder", "/")
+    def open_folder(self, path: str = "/") -> str:
+        return QFileDialog.getExistingDirectory(None, "folder", path)

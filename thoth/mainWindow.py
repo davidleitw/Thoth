@@ -8,7 +8,7 @@ import ntpath, os
 from thoth.Controller import Controller
 
 class MainWindow(QMainWindow):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, winDefaultPath="/", openDefaultPath="/"):
         super(MainWindow, self).__init__(parent)
         self.model = None
         self.prePath = "/"
@@ -16,7 +16,9 @@ class MainWindow(QMainWindow):
         self.rightTree = None
         self.contextMenu = None
         self.controller = Controller()
-        
+        self.winDefault = winDefaultPath
+        self.opnDefault = openDefaultPath
+
         self.loadInitialSetting()
         self.createLeftField()
         self.createRightFileTree()
@@ -65,7 +67,7 @@ class MainWindow(QMainWindow):
         self.model.setRootPath("")
         self.rightTree = QTreeView()
         self.rightTree.setModel(self.model)
-        self.rightTree.setRootIndex(self.model.index("/"))
+        self.rightTree.setRootIndex(self.model.index(self.winDefault))
         self.rightTree.setColumnWidth(0, 250)
         self.rightTree.setAlternatingRowColors(True)
         self.rightTree.setContextMenuPolicy(Qt.CustomContextMenu)
@@ -97,7 +99,7 @@ class MainWindow(QMainWindow):
 
     def openFolderHandler(self) -> None:
         self.prePath = self.model.filePath(self.rightTree.rootIndex()) # 將前一次操作的目錄存起來，供上一頁功能使用
-        filepath = self.controller.open_folder()
+        filepath = self.controller.open_folder(self.opnDefault)
         if filepath != '' and os.path.isdir(filepath):
             self.rightTree.setRootIndex(self.model.index(filepath))
 
