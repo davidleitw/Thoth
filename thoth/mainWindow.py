@@ -1,5 +1,5 @@
 from PyQt5 import QtCore
-from PyQt5.QtCore import Qt as Qt
+from PyQt5.QtCore import QCoreApplication, Qt as Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QStyle, QWidget, \
     QPushButton, QGroupBox, \
     QVBoxLayout, QStyleFactory, QHBoxLayout, QTreeView, QFileSystemModel, \
@@ -49,7 +49,7 @@ class MainWindow(QMainWindow):
         ExitButton = QPushButton(" Exit")
         ExitButton.setIcon(self.style().standardIcon(getattr(QStyle, 'SP_DialogCloseButton')))
         ExitButton.setStyleSheet("QPushButton { text-align: left; }")
-        ExitButton.clicked.connect(self.exitHandler)
+        ExitButton.clicked.connect(QCoreApplication.instance().quit)
 
         layout = QVBoxLayout()
         layout.addWidget(SetupButton)
@@ -111,9 +111,6 @@ class MainWindow(QMainWindow):
     # 上一頁功能
     def backHandler(self) -> None:
         self.rightTree.setRootIndex(self.model.index(self.prePath))
-
-    def exitHandler(self) -> None:
-        self.close()
 
     def createNewFileHandler(self) -> None:
         basePath = self.getFilePath()
