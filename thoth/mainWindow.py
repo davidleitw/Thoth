@@ -8,7 +8,8 @@ import ntpath, os
 from thoth.Controller import Controller
 
 class MainWindow(QMainWindow):
-    def __init__(self, parent=None, winDefaultPath="/", openDefaultPath="/"):
+    def __init__(self, parent=None, winDefaultPath: str ="/", 
+                                    openDefaultPath: str="/", backupDefaultPath: str="/"):
         super(MainWindow, self).__init__(parent)
         self.model = None
         self.prePath = "/"
@@ -18,6 +19,7 @@ class MainWindow(QMainWindow):
         self.controller = Controller()
         self.winDefault = winDefaultPath
         self.opnDefault = openDefaultPath
+        self.bupDefault = backupDefaultPath
 
         self.loadInitialSetting()
         self.createLeftField()
@@ -32,7 +34,7 @@ class MainWindow(QMainWindow):
         SetupButton = QPushButton(" Set backup path")
         SetupButton.setIcon(self.style().standardIcon(getattr(QStyle, 'SP_DirOpenIcon')))
         SetupButton.setStyleSheet("QPushButton { text-align: left; }")
-        SetupButton.clicked.connect(self.controller.set_backup)
+        SetupButton.clicked.connect(self.setbackupHandler)
         
         OpenFolderButton = QPushButton(" Open Folder")
         OpenFolderButton.setIcon(self.style().standardIcon(getattr(QStyle, 'SP_DirOpenIcon')))
@@ -102,6 +104,9 @@ class MainWindow(QMainWindow):
         filepath = self.controller.open_folder(self.opnDefault)
         if filepath != '' and os.path.isdir(filepath):
             self.rightTree.setRootIndex(self.model.index(filepath))
+
+    def setbackupHandler(self):
+        self.controller.set_backup(self.bupDefault)
 
     # 上一頁功能
     def backHandler(self) -> None:
