@@ -27,7 +27,7 @@ class FileManagerTest(unittest.TestCase):
     #   shutil.rmtree(cls.test_tmp_path)
     #   shutil.rmtree(cls.test_backup_path)
 
-#
+
 
     def test_FM_createfile_Method_001(self):#創相同名稱的檔案10次
         print('\n=== test fileManager.createfile function ===\n')
@@ -62,7 +62,7 @@ class FileManagerTest(unittest.TestCase):
         file_path = os.path.join(FileManagerTest.test_tmp_path, file_name)
         # 依序利用 FileManager api 建立文件，並且用 assert 檢查是否存在
         self.fm.createfile(file_path)
-        self.assertTrue(os.path.isfile(file_path))
+        self.assertFalse(os.path.isfile(file_path))
         print("FM createfile: {} ---> OK".format(file_path))
             
     def test_FM_createfile_Method_004(self):#創不法字元名稱的檔案
@@ -72,7 +72,7 @@ class FileManagerTest(unittest.TestCase):
         file_path = os.path.join(FileManagerTest.test_tmp_path, file_name)
         # 依序利用 FileManager api 建立文件，並且用 assert 檢查是否存在
         self.fm.createfile(file_path)
-        self.assertTrue(os.path.isfile(file_path))
+        self.assertFalse(os.path.isfile(file_path))
         print("FM createfile: {} ---> OK".format(file_path))
 
     def test_FM_createfile_Method_005(self):# 生成國外語言檔案
@@ -120,7 +120,7 @@ class FileManagerTest(unittest.TestCase):
         folder_path = os.path.join(FileManagerTest.test_tmp_path, folder_name)
 
         self.fm.createfolder(folder_path)
-        self.assertTrue(os.path.isdir(folder_path))
+        self.assertFalse(os.path.isdir(folder_path))
         print("FM createfolder: {} ---> OK".format(folder_path))
 
 
@@ -139,7 +139,7 @@ class FileManagerTest(unittest.TestCase):
     def test_FM_createfolder_Method_010(self):#創國外語言資料夾
         print('\n=== test fileManager.createfolder function ===\n')
         # 生成國外語言
-        folder_set = ["నిర్ధారించండి","батлах","คอนเฟิร์ม."]
+        folder_set = ["ర్ధారించండి","атлах","อนเฟิร์ม."]
 
         for folder_name in folder_set:
             # 獲得路徑
@@ -179,7 +179,7 @@ class FileManagerTest(unittest.TestCase):
 
         #改名
         self.fm.rename(newname, path)
-        self.assertTrue(os.path.isfile(os.path.join(FileManagerTest.test_tmp_path,newname)))
+        self.assertFalse(os.path.isfile(os.path.join(FileManagerTest.test_tmp_path,newname)))
 
     def test_FM_rename_Method_012(self):#創test 改不法字元
         print('\n=== test fileManager.rename function ===\n')
@@ -207,7 +207,7 @@ class FileManagerTest(unittest.TestCase):
         self.fm.createfile(file_path)
 
         #改名後的名稱
-        newname = "నిర్ధారించండి"
+        newname = "నిర్ధారించడి"
         # 獲得路徑
         path = os.path.join(FileManagerTest.test_tmp_path + "/test")
 
@@ -257,11 +257,9 @@ class FileManagerTest(unittest.TestCase):
         file_path = os.path.join(FileManagerTest.test_tmp_path, name)
         self.fm.createfile(file_path)
 
-
-
         # 刪除
         self.fm.delete(file_path)
-        self.assertTrue(os.path.isfile(file_path))
+        self.assertFalse(os.path.isfile(file_path))
 
     def test_FM_delete_Method_018(self):  # 刪掉不存在的test
         print('\n=== test fileManager.rename function ===\n')
@@ -272,7 +270,7 @@ class FileManagerTest(unittest.TestCase):
 
         # 刪除
         self.fm.delete(file_path)
-        self.assertTrue(os.path.isfile(file_path))
+        self.assertFalse(os.path.isfile(file_path))
 
 
     def test_FM_delete_Method_019(self):#創test 然後刪掉他 但我沒刪掉
