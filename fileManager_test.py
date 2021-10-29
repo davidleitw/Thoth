@@ -32,7 +32,6 @@ class FileManagerTest(unittest.TestCase):
 
     def test_FM_createfile_Method_001(self):#創相同名稱的檔案10次
         print('\n=== test fileManager.createfile function ===\n')
-        print('test')
         # 生成 10 個隨機字串
         file_name = StringGenerator("[\l\d]{16}").render()
         for i in range(1,10):
