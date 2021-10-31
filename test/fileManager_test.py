@@ -5,12 +5,13 @@ import unittest
 from pathlib import Path
 from strgen import StringGenerator
 
-sys.path.append('../thoth')
+
 
 class FileManagerTest(unittest.TestCase):
     # 測試前，在/tmp底下創立測試資料夾
     def setUp(self):
         try:
+            sys.path.append('../thoth')
             from thoth.FileManager import FileManager
             self.fm = FileManager()
         except ImportError:
