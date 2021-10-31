@@ -1,11 +1,12 @@
 import os
 import sys
+import codecs
 import shutil
 import unittest
 from pathlib import Path
 from strgen import StringGenerator
 
-
+sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
 
 class FileManagerTest(unittest.TestCase):
     # 測試前，在/tmp底下創立測試資料夾
