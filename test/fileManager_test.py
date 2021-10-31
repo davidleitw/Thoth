@@ -18,8 +18,8 @@ class FileManagerTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.test_backup_path = 'C:/Users/user/Desktop/testBackup/'
-        cls.test_tmp_path = 'C:/Users/user/Desktop/testFolder/'
+        cls.test_backup_path = 'C:/tmp/testBackup/'
+        cls.test_tmp_path = 'C:/tmp/testFolder/'
         os.mkdir(cls.test_tmp_path)
         os.mkdir(cls.test_backup_path)
 
