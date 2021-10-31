@@ -14,6 +14,7 @@ class FileManagerTest(unittest.TestCase):
             sys.path.append('../thoth')
             from thoth.FileManager import FileManager
             self.fm = FileManager()
+            print("Import file manager success")
         except ImportError:
             print("Import Error, new path = {}".format(os.getcwd()))
             return
