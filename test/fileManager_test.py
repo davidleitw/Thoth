@@ -15,6 +15,7 @@ class FileManagerTest(unittest.TestCase):
             from thoth.FileManager import FileManager
             self.fm = FileManager()
         except ImportError:
+            print("Import Error, new path = {}".format(os.getcwd()))
             return
 
     @classmethod
