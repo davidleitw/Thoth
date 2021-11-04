@@ -5,6 +5,7 @@ from pathlib import Path
 class FileManager:
     def __init__(self):
         self.backup_path = ""
+        self.symbols = "?><\\/:*|"
 
     def set_backup_path(self, path: str) -> None:
         self.backup_path = path
@@ -13,12 +14,26 @@ class FileManager:
         return self.backup_path
 
     def createfile(self, path: str) -> None:
+        filename = os.path.split(path)[1]
+        for sym in self.symbols:
+            if sym in filename:
+                return False
         Path(path).touch()
+        return True
 
     def createfolder(self, path: str) -> None:
+        foldername = os.path.split(path)[1]
+        for sym in self.symbols:
+            if sym in foldername:
+                return False
+
         os.mkdir(path)
         
     def rename(self, new_name: str, filepath: str) -> bool:
+        for sym in self.symbols:
+            if sym in new_name:
+                return False
+
         prefix = os.path.split(filepath)[0]
         new_filepath = os.path.join(prefix, new_name)
         if not os.path.isfile(new_filepath):
