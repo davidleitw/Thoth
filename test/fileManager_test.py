@@ -1,25 +1,29 @@
 import os
 import sys
+import codecs
 import shutil
 import unittest
 from pathlib import Path
 from strgen import StringGenerator
 
-sys.path.append('../thoth')
+sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
 
 class FileManagerTest(unittest.TestCase):
     # 測試前，在/tmp底下創立測試資料夾
     def setUp(self):
         try:
+            sys.path.append('../thoth')
             from thoth.FileManager import FileManager
             self.fm = FileManager()
+            print("Import file manager success")
         except ImportError:
+            print("Import Error, new path = {}".format(os.getcwd()))
             return
 
     @classmethod
     def setUpClass(cls):
-        cls.test_backup_path = 'C:/Users/user/Desktop/testBackup/'
-        cls.test_tmp_path = 'C:/Users/user/Desktop/testFolder/'
+        cls.test_backup_path = 'C:/tmp/testBackup/'
+        cls.test_tmp_path = 'C:/tmp/testFolder/'
         os.mkdir(cls.test_tmp_path)
         os.mkdir(cls.test_backup_path)
 
